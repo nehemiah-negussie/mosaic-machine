@@ -4,13 +4,14 @@ import sys
 import helper
 
 # Change these accordingly
-original_path = 'lena.png'  # path to original image
+original_path = 'tiger.jpeg'  # path to original image
 default_export = "saved_final.png"  # filename of exported image
 path_to_library = "/Users/nemo/unsplash"  # path to library of images 
 
 # Take command line arguments as exported filename
 if (len(sys.argv)):
-    saved_filename = str(sys.argv[0])
+    saved_filename = str(sys.argv[1])
+    print (saved_filename)
 else:
     saved_filename = default_export
 
