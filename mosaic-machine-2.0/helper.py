@@ -1,20 +1,38 @@
 import cv2 as cv
 import numpy as np
+from PIL import Image
+import scipy
+import scipy.misc
+import scipy.cluster
 
-# calculate average colour of image
-def calculateColour(image):
-    # resize to 1 pixel and get the BGR
-    resized = cv.resize(image,(1,1))
-    return [resized[0, 0, 0], resized[0,0,1], resized[0,0,2]] # return BGR
+# Calculates the average colour of an image
+
+
+def calculateColour(opencv_image):
+    # Convert OpenCV image to PIL image
+    opencv_image = cv.cvtColor(opencv_image, cv.COLOR_BGR2RGB)
+    image = Image.fromarray(opencv_image)
+    # Resizing for speed
+    image = image.resize((150, 150))
+    ar = np.asarray(image)
+    shape = ar.shape
+    ar = ar.reshape(scipy.product(shape[:2]), shape[2]).astype(float) 
+    codes, _ = scipy.cluster.vq.kmeans(ar, 1)  # Calculate the 1 cluster (i.e dominant colour)
+    dom = np.around(codes[0])
+    return dom
+
+# Search through all lines of text file
+
 
 def searchLines(lines, original):
+    # Set initial best values as worst possible so they will be overwritten
     best = ""
-    best_score = 500 # the highest possible distance between two colors is sqrt(3 * 255^2) = ~442
+    best_score = 500  # The largest possible diff between two colors is ~442
     for line in lines:
         a = line.split()
-        # euclidian distance
-        distance  = np.sqrt(pow(int (a[1]) - original[0], 2) + pow(int (a[2]) - original[1], 2) + pow(int (a[3]) - original[2], 2))
-        # only keep the lowest score
+        # Euclidian distance for BGR or RGB
+        distance = np.sqrt(pow(int(a[1]) - original[0], 2) + pow(int(a[2]) - original[1], 2) + pow(int(a[3]) - original[2], 2))
+        # Only keep the lowest score
         if distance < best_score:
             best_score = distance
             best = a[0]
