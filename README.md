@@ -38,7 +38,7 @@ Another approach would be to use the most **dominant** colour in an image. This 
 *First*, clone the repository:
 `git clone https://github.com/nehemiah-negussie/mosaic-machine.git	`
 
-*Second*, install all libraries, languages and tools shown below.
+*Second*, install all libraries, languages and tools shown above.
 
 *Third*, edit the `core.py` and `setup.py` file to your specific path to the library  and image paths.
 
